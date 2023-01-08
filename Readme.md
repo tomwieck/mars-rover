@@ -3,30 +3,88 @@
 ## Part 1 - Initial Planning
 
 
-👉 After reading the second part, please return here to Part 1 and submit your initial design thoughts. 
-
-👉 It's up to you what to include in your design, but we suggest some kind of sketch, notes or even pen/paper and a photo of your notes is great.
-
-👉 Think about what modules you'll need, remembering the Single Responsibility Principle - each piece of code should have one job. (A 'job' in this case could be as simple as "converts an X to a Y", or a more complex job like "this class's job is to manage the flow of data between a few other classes")
-
-👉 If you want to also include sketches, written ideas, whatever, that's up to you!
-
-👉 This doesn't have to be particularly long or detailed - a short feature list, a few paragraphs of thoughts, a list of classes, perhaps a sketch is fine.
-
-
 Plateau - Square / rectangle
 
 Letters - N, S, W, E for North, South, West and East
 
 Rover - Rovers position is x and y
 
-___ 
+Will need an [x,y] to keep track of the plateau based on user input. 
 
-## Example
+For example
 
-> `0 0 N`
+5 5 ->
+
+| x , y | x | x | x | x | x |
+|-----|-----|-----|-----|-----|-----|
+y | 4,0 | 4,1 | 4,2 | 4,3 | 4,4 |
+y | 3,0 | 3,1 | 3,2 | 3,3 | 3,4 |
+y | 2,0 | 2,1 | 2,2 | 2,3 | 2,4 |
+y | 1,0 | 1,1 | 1,2 | 1,3 | 1,4 |
+y | 0,0 | 0,1 | 0,2 | 0,3 | 0,4 |
+
+`Function createGrid(number x, number y) => return { Array[…x,…y]; }`
+
+Be able to accept several lines of input into the program, first through the command line and then later expand to more of a UI 
+
+Lines of Input to the Program:
+
+## First input
+`createGrid(x: number, y: number)`
+
+Example 
+
+`createGrid(5,5)`
+
+## Second input
+
+`placeRover(x: number, y: number, direction: Direction) => return { success: Boolean }`
+
+`Direction type = ’N’ | ’S’ | ‘E’ | ‘W’`
+
+Don’t allow numbers larger than the size of the grid, or any letters outside of the Direction type.
+
+e.g.
+
+`0 0 N`
 
 This means the Rover is at the bottom-left corner facing in the North direction.
+
+## Third Input 
+
+`moveRover(directions: string) => return { success: Boolean }`
+
+`Movement type = ‘L’ | ‘R’ | ‘M’`
+
+L - Spins the Rover 90 degrees Left without moving from the current coordinate point
+
+R - Spins the Rover 90 degrees Right without moving from the current coordinate point
+
+M - Moves the Rover forward by one grid point, maintaining the same heading/orientation
+
+Return false if this would cause the rover to fall off the edgemay need two error messages, one for invalid input and one for input causing rover to fall
+
+Allow Second and Third input to repeat (set amount of times? Will need to be decided)
+
+Then display output (command line or UI)
+
+`complete() => return { 'Number Number Direction' } `
+
+e.g. 
+
+`1 3 N`
+
+Methods Overview
+
+```
+createGrid(x: number, y: number)
+
+placeRover(x: number, y: number, direction: Direction) => return { success: Boolean }
+
+moveRover(directions: string) => return { success: Boolean }
+
+complete() => return { Number, Number, Direction }
+```
 
 ____
 
@@ -41,8 +99,7 @@ Spins the Rover 90 degrees Left without moving from the current coordinate point
 
 <b>R</b> 
 
-Spins the Rover 90 degrees Right without moving from the current
-coordinate point
+Spins the Rover 90 degrees Right without moving from the current coordinate point
 
 <b>M</b> 
 
