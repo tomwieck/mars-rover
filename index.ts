@@ -4,6 +4,8 @@ const directions = ["N", "S", "E", "W"] as const;
 
 type Direction = typeof directions[number];
 
+const rovers: Rover[] = [];
+
 const directionsObj = {
     "N": "North",
     "S": "South",
@@ -12,8 +14,8 @@ const directionsObj = {
 }
 class Rover {
     id: number;
-    position?: number[];
-    facingDirection?: string;
+    position: number[];
+    facingDirection: string;
 
     constructor(position: number[], facingDirection: string) {
         this.id = Math.floor(Math.random() * 10000000)
@@ -57,7 +59,7 @@ function createGrid(size: string): number[][] {
         fullMatrix.push(matrix);
     }
 
-	askQuestion('Enter Rovers starting position (x y Directon: e.g. 1 2 N)', placeRover);
+	askQuestion('Enter Rovers starting position (x y Directon: e.g. 1 2 N): ', placeRover);
 
     return fullMatrix;
 }
@@ -82,9 +84,13 @@ function placeRover(position: string): boolean {
 
     const rover = new Rover(gridPosition, direction);
 
+    rovers.push(rover);
+
     print(`Rover placed at x=${x}, y=${y}, facing ${direction}`)
+
+    print(`-------------------------`)
     
-	askQuestion('Enter Rovers movement (L, R or M)', roverInstructions);
+	askQuestion('Enter Rovers movement (L, R or M): ', roverInstructions);
 
     return true;
 }
@@ -93,42 +99,85 @@ function roverInstructions(instructions: string): boolean {
     // 'LMLMLMLMM'
     const instructionsArr = instructions.toUpperCase().split('');
 
-    instructionsArr.map((i) => {
-        if (i === ('L' || 'R')) {
-            roverRotate(i);
-        }
+    rovers.map((r, index) => {
+        instructionsArr.map((i) => {
+            if (i === 'L' || i === 'R') {
+                rovers[index].facingDirection = roverRotate(rovers[index], i);
+            }
+    
+            if (i === 'M') {
+                rovers[index] = roverForward(rovers[index], i);
+            }
+        })
 
-        if (i === 'M') {
-            roverForward(i);
-        }
+        roverOutput(rovers[index]);
     })
 
     return true;
 }
 
-function roverRotate(lr: string) {
+function roverRotate(rover: Rover, lr: string): any {
     if (lr === 'L') {
-        // if (roverDirection)
-        // 'N' -> 'W'
-        // 'W' -> 'S' 
-        // 'S' -> 'E'
-        // 'E' -> 'N'
+        if (rover.facingDirection === 'N') {
+            return 'W'
+        }
+
+        if (rover.facingDirection === 'W') {
+            return 'S'
+        }
+
+        if (rover.facingDirection === 'S') {
+            return 'E'
+        }
+
+        if (rover.facingDirection === 'E') {
+            return 'N'
+        }
     }
 
     if (lr === 'R') {
-        // if (roverDirection)
-        // 'N' -> 'E'
-        // 'E' -> 'S'
-        // 'S' -> 'W'
-        // 'W' -> 'N'
+        if (rover.facingDirection === 'N') {
+            return 'E'
+        }
+
+        if (rover.facingDirection === 'W') {
+            return 'N'
+        }
+
+        if (rover.facingDirection === 'S') {
+            return 'W'
+        }
+
+        if (rover.facingDirection === 'E') {
+            return 'S'
+        }
     }
+
+    return;
 }
 
-function roverForward(m: 'M') {
-    // N -> (0, +1)
-    // E -> (+1, 0)
-    // S -> (0, -1)
-    // W -> (-1, 0)
+function roverForward(rover: Rover, m: 'M') {
+    if (rover.facingDirection === 'N') {
+        rover.position[1] += 1;
+    }
+
+    if (rover.facingDirection === 'W') {
+        rover.position[0] -= 1;
+    }
+
+    if (rover.facingDirection === 'S') {
+        rover.position[1] -= 1;
+    }
+
+    if (rover.facingDirection === 'E') {
+        rover.position[0] += 1;
+    }
+
+    return rover;
+}
+
+function roverOutput(rover: any) {
+	print(`Rovers final position ${rover.position[0]}, ${rover.position[1]}, ${rover.facingDirection}`);
 }
 
 startRover();
