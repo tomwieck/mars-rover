@@ -1,32 +1,30 @@
 import { clear, print, askQuestion } from './console';
 
-const directions = ["N", "S", "E", "W"] as const;
+const DIRECTIONS = ["N", "S", "E", "W"] as const;
 
-type Direction = typeof directions[number];
+type Direction = typeof DIRECTIONS[number];
+type Position = [number, number]; 
 
-const rovers: Rover[] = [];
-
-// first rover added will start from 0
-let roverNumber: number = -1;
-
-const directionsObj = {
-    "N": "North",
-    "S": "South",
-    "E": "East",
-    "W": "West",
-}
+// Move to rover.ts
 class Rover {
     id: number;
-    position: number[];
-    facingDirection: string;
+    position: Position;
+    facingDirection: Direction;
 
-    constructor(position: number[], facingDirection: string) {
+    constructor(position: Position, facingDirection: Direction) {
         this.id = Math.floor(Math.random() * 10000000)
         this.position = position;
         this.facingDirection = facingDirection;
     }
 }
 
+const rovers: Rover[] = [];
+
+// first rover added will start from 0
+let roverNumber: number = -1;
+
+
+// Move to grid.ts
 class Grid {
     size: number[]
 
@@ -35,12 +33,13 @@ class Grid {
     }
 }
 
-
+// Move to rover.ts
 export function startRover(): void {
 	clear();
 	askQuestion(`Enter Plataeu Size (x y e.g. 5 5): `, createGrid);
 }
 
+// Move to grid.ts
 function createGrid(size: string): number[][] {
 	// TODO add error / type checking 
     print(`Creating ${size} grid`);
@@ -71,8 +70,11 @@ function questionPlaceRover() {
 	askQuestion('Enter Rovers starting position (x y Directon: e.g. 1 2 N): ', placeRover);
 }
 
+// Move to rover.ts
 function placeRover(position: string): boolean {
     // TO DO: Don’t allow numbers larger than the size of the grid, or any letters outside of the Direction type.
+    
+    // Split into function parsePosition(input: string) : Position {}
 
     let splitString = position.split(' ');
 
@@ -102,6 +104,7 @@ function placeRover(position: string): boolean {
     return true;
 }
 
+// Move to rover.ts
 function addNewRover(yesOrNo: string): any {
     yesOrNo = yesOrNo.toUpperCase();
 
@@ -119,6 +122,7 @@ function addNewRover(yesOrNo: string): any {
     }
 }
 
+// Move to rover.ts
 function roverInstructions(instructions: string): boolean {
     // 'LMLMLMLMM'
     const instructionsArr = instructions.toUpperCase().split('');
@@ -137,6 +141,9 @@ function roverInstructions(instructions: string): boolean {
 
     return true;
 }
+
+// Move to rover.ts
+// function roverRotate(start: Direction, rotation: 'L' | 'R'): Direction {}
 
 function roverRotate(roverDirection: string, lr: string): any {
     if (lr === 'L') {
@@ -178,6 +185,7 @@ function roverRotate(roverDirection: string, lr: string): any {
     return;
 }
 
+// Move to rover.ts
 function roverForward(rover: Rover) {
     if (rover.facingDirection === 'N') {
         rover.position[1] += 1;
@@ -198,6 +206,7 @@ function roverForward(rover: Rover) {
     return rover;
 }
 
+// Move to rover.ts
 function roverOutput() {
     rovers.map((rover, index) => {
 	    print(`Rover ${index + 1} final position: ${rover.position[0]}, ${rover.position[1]}, ${rover.facingDirection}`);

@@ -1,5 +1,84 @@
 # Mars Rover Task
 
+## What is it?
+---
+## How to use
+---
+<details>
+<summary>To Do</summary>
+<pre>
+
+---
+
+🟥🟥 Running `npm test` there appears to be no tests at all - this was supposed to be a TDD-based project, but the minimum would be to ensure there are at least _some_ tests even if they're written after the fact!
+
+---
+
+🟥 `npm start` - the prompts all allow invalid input so I can enter "duiahuie" as a grid and it doesn't complain, it just creates a grid from that somehow. Similarly, invalid commands can be entered which causes the app to crash.
+
+It's important to check for and handle invalid input - this is part of the purpose of using automated testing, but even without tests the user experience is important!
+
+---
+
+🟨 const matrix : number[] = [];
+const fullMatrix : number[][] = [];
+
+for (let i = 0; x > i; i++) {
+matrix.push(i);
+}
+
+for (let i = 0; y > i; i++) {
+fullMatrix.push(matrix);
+}
+
+This seems like a confusing way to initialise a 2D array, although as above if you use a tuple for the maxGrid size you just need a single value, say [10,10] for a 10 x 10 grid.
+
+To see if it's inside the plateau you just check that any given position is less than the max for both the first and second values.
+
+---
+
+🟥 `placeRover(position: string)`
+
+Making position a string here is part of the problem. This function would be more accurately named
+
+`parseUserInputStringAndCreatePositionObjectAndThenPlaceRoverThere`
+
+which suggests it's doing too much
+
+`placeRover(position: Position)`
+would make this function super simple - it just places a rover at the position!
+
+you'd then have to write a
+function parsePosition(input: string) : Position {}
+
+but this function is then VERY testable - ensure it returns valid positions or defaults for any given string
+
+OR
+
+function parsePosition(input: string) : Position | undefined {}
+
+If you wanted you could get it to return undefined if the string is invalid, and then anyone who calls this function has to sensibly handle undefined. Either way is fine.
+
+---
+
+👀 // TODO check type is Direction
+
+I think we've found our culprit 😅
+
+---
+
+🟨 function roverRotate(roverDirection: string, lr: string): any {}
+
+Imagine if this lived in direction.ts as a helper, and instead had this signature:
+
+function roverRotate(start: Direction, rotation: 'L' | 'R'): Direction {}
+
+This would immediately eliminate a lot of bugs!
+
+---
+</pre>
+</details>
+
 ## Part 1 - Initial Planning
 
 
